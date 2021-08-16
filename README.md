@@ -19,5 +19,6 @@ Font Awesome
 
 ### Working
 
-1. Run `symfony server:start` to launch your local php web server
-2. Run `yarn run dev --watch` to launch your local server for assets
+1. Run `symfony console d:d:c`, `symfony console make:migration`, `symfony console d:m:m`, `symfony console d:f:l` to create, create a migration and load fixtures
+2. Run `symfony server:start` to launch your local php web server
+3. Run `yarn run dev --watch` to launch your local server for assets
