@@ -1,4 +1,5 @@
 <?php
+die('Hello world');
 
 use App\Kernel;
 use Symfony\Component\Dotenv\Dotenv;
