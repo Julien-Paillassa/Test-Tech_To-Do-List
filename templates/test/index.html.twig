@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ website }}{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <h1 class="text-center">{{ website }}</h1>
+        <table class="table">
+            <thead class="thead-light">
+            <tr class="justify-content-between text-center">
+                <th>Libellé</th>
+                <th>Done</th>
+                <th>Created At</th>
+            </tr>
+            </thead>
+            <tbody class="justify-content-between text-center mx-auto">
+                {% for to_do in toDoList %}
+                    <tr>
+                        <td>{{ to_do.libelle }}</td>
+                        {% if to_do.isDone == 0 %}
+                        <td>To do</td>
+                        {% else %}
+                        <td>Done</td>
+                        {% endif %}
+                        <td>28</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
