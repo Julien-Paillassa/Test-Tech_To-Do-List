@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\ToDoList;
 use App\Form\ToDoListType;
 use App\Repository\ToDoListRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +24,7 @@ class ToDoListController extends AbstractController
     /**
      * @Route("/", name="to_do_list_index")
      */
-    public function index(): Response
+    public function index(ToDoListRepository $toDoListRepository): Response
     {
         $toDoList = $this->toDoListRepository->findAll();
 
@@ -97,5 +99,15 @@ class ToDoListController extends AbstractController
         }
 
         return $this->redirectToRoute('to_do_list_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/change/status/{id}", name="to_do_list_change_status")
+     */
+    public function changeStatus(EntityManagerInterface $entityManager, ToDoList $toDoList): Response
+    {
+        $toDoList->setIsDone(!$toDoList->getIsDone());
+        $entityManager->flush();
+        return $this->redirectToRoute('to_do_list_index');
     }
 }

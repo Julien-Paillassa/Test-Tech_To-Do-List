@@ -3,35 +3,84 @@
 {% block title %}ToDoList index{% endblock %}
 
 {% block body %}
-<div class="container py-5">
-    <h1 class="text-center">{{ website }}</h1>
-    <table class="table">
-        <thead class="thead-light">
-        <tr class="justify-content-between text-center">
-                <th>Id</th>
-                <th>Libelle</th>
-                <th>IsDone</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody class="justify-content-between text-center mx-auto">
-        {% for to_do in to_do_list %}
-            <tr>
-                <td>{{ to_do.id }}</td>
-                <td>{{ to_do.libelle }}</td>
-                <td>{{ to_do.isDone ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('to_do_list_show', {'id': to_do.id}) }}">show</a>
-                    <a href="{{ path('to_do_list_edit', {'id': to_do.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <a href="{{ path('to_do_list_new') }}">Create new</a>
+<div class="container">
+    <div class="title">
+        <h1 class="text-center py-4">{{ website }}</h1>
+    </div>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Trier par
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{{ path('order_by_libelle_asc') }}">A à Z</a>
+            <a class="dropdown-item" href="{{ path('order_by_libelle_desc') }}">Z à A</a>
+            <a class="dropdown-item" href="{{ path('order_by_id_asc') }}">Id croissante</a>
+            <a class="dropdown-item" href="{{ path('order_by_id_desc') }}">Id décroissante</a>
+            <a class="dropdown-item" href="{{ path('order_by_task_done') }}">Tâches faites</a>
+            <a class="dropdown-item" href="{{ path('order_by_task_to_do') }}">Tâches à faire</a>
+            <a class="dropdown-item" href="{{ path('order_by_recent_task') }}">Tâches récentes</a>
+            <a class="dropdown-item" href="{{ path('order_by_old_task') }}">Tâches anciennes</a>
+        </div>
+    </div>
+    <div class="new-task py-3">
+        <a href="{{ path('to_do_list_new') }}"><button class="btn btn-success">+ Nouvelle tâche</button></a>
+    </div>
+    <div>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+            <tr class="justify-content-between text-center">
+                    <th>ID</th>
+                    <th>Libellé</th>
+                    <th>Status</th>
+                    <th>Changer status</th>
+                    <th>Date de création</th>
+                    <th>Date de mise à jour</th>
+                    <th>Modifier</th>
+                    <th>Supprimer</th>
+                </tr>
+            </thead>
+            <tbody class="justify-content-between text-center mx-auto">
+            {% for to_do in to_do_list %}
+                <tr>
+                    <td>{{ to_do.id }}</td>
+                    <td>
+                        {% if to_do.isDone == 0 %}
+                            <p>{{ to_do.libelle }}</p>
+                        {% else %}
+                        <p class="line">{{ to_do.libelle }}</p>
+                        {% endif %}
+                    </td>
+                    <td><strong>{{ to_do.isDone ? '<i class="fas fa-check-circle fa-2x text-success" </i>' : '<i class="fas fa-times-circle fa-2x text-danger"></i>' }}</strong></td>
+                    <td>
+                        {% if to_do.isDone %}
+                            <a href="{{ path('to_do_list_change_status', {'id': to_do.id}) }}">
+                                <button class="border border-danger btn btn-white text-danger"> <strong>Fait</strong></button>
+                            </a>
+                        {% else %}
+                            <a href="{{ path('to_do_list_change_status', {'id': to_do.id}) }}">
+                                <button class="border border-success btn btn-white text-success"><strong>A faire</strong></button>
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>{{ to_do.createdAt|date("d/m/Y") }}</td>
+                    <td>{{ to_do.updatedAt|date("d/m/Y") }}</td>
+                    <td>
+                        <a href="{{ path('to_do_list_edit', {'id': to_do.id}) }}"><button class="btn btn-primary">Edit</button></a>
+                    </td>
+                    <td>
+                        <form method="post" action="{{ path('to_do_list_delete', {'id': to_do.id}) }}" onsubmit="return confirm('Etes-vous sûr de vouloir supprimer cette tâche ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ to_do.id) }}">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
