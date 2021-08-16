@@ -19,6 +19,6 @@ Font Awesome
 
 ### Working
 
-1. Run `symfony console d:d:c` o create database, `symfony console make:migration` and `symfony console d:m:m` to create a migration, `symfony console d:f:l` to load fixtures
+1. Run `symfony console d:d:c` to create database, `symfony console make:migration` and `symfony console d:m:m` to create a migration, `symfony console d:f:l` to load fixtures
 2. Run `symfony server:start` to launch your local php web server
 3. Run `yarn run dev --watch` to launch your local server for assets
